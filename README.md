@@ -120,7 +120,7 @@ angular.module('FileManagerApp').config(['fileManagerConfigProvider', function (
 </script>
 ```
 
-You can do many things by extending the configuration. Like hide the sidebar or the search button. See [the list of default configurations](/src/js/providers/config.js).
+You can do many things by extending the configuration. Like hide the sidebar or the search button. See [the list of default configurations](/public/js/providers/config.js).
 
 ---------
 

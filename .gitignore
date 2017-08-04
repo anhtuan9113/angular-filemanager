@@ -2,3 +2,5 @@
 nbproject/
 node_modules/
 target/
+dist
+public/bower_components

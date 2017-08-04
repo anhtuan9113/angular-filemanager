@@ -10,12 +10,18 @@ var eslint = require('gulp-eslint');
 var del = require('del');
 var path = require('path');
 
+const plugins = require('gulp-load-plugins')();
+
 // Vars
-var src = 'src/';
-var dst = 'dist/';
-var tplPath = 'src/templates'; //must be same as fileManagerConfig.tplPath
+var src = 'public/';
+var dst = 'dist/public';
+var tplPath = 'public/templates'; //must be same as fileManagerConfig.tplPath
 var jsFile = 'angular-filemanager.min.js';
 var cssFile = 'angular-filemanager.min.css';
+
+function getTask(task) {
+    return require('./tasks/' + task)(gulp, plugins);
+}
 
 gulp.task('clean', function (cb) {
   del(dst + '/*', cb);
@@ -70,6 +76,6 @@ gulp.task('lint', function () {
     .pipe(eslint.format())
     .pipe(eslint.failOnError());
 });
-
+gulp.task('dist:copy', getTask('dist.copy'));
 gulp.task('default', ['concat-uglify-js', 'minify-css']);
-gulp.task('build', ['clean', 'lint', 'default']);
+gulp.task('build', ['clean', 'lint', 'default', 'dist:copy']);
