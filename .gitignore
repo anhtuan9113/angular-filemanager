@@ -4,3 +4,8 @@ node_modules/
 target/
 dist
 public/bower_components
+.idea/angular-filemanager.iml
+.idea/modules.xml
+.idea/preferred-vcs.xml
+.idea/vcs.xml
+.idea/workspace.xml

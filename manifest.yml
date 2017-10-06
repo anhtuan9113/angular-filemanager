@@ -1,7 +1,7 @@
 ---
 applications:
-  - name: steven-test-blob
-    memory: 128M
+  - name: steven-test-blob-azr
+    memory: 1G
     buildpack: nodejs_buildpack
     command: node server/app.js
     path: dist

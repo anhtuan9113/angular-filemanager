@@ -15,12 +15,21 @@ var server = http.createServer(app).listen(port, function () {
     console.log('Express server listening on port %s', port);
 });
 
+/*
+"credentials": {
+    "access_key_id": "00d140d0b842e6bffa6b",
+        "bucket_name": "bucket-79008bfd-ae65-4fd0-9411-95731c9ade03",
+        "host": "blobstore-azure-usw01.data-services.predix.io:443",
+        "secret_access_key": "iLa+Jx/q0zUwWpR/3v5SkfCLbyS/B/y2j3cwnW5X",
+        "url": "https://bucket-79008bfd-ae65-4fd0-9411-95731c9ade03.blobstore-azure-usw01.data-services.predix.io:443"
+},*/
 
 var initS3 = function (req, res, next) {
+    console.log('00d140d0b842e6bffa6b');
     req.s3 = new AWS.S3({
-        endpoint: "https://bucket-7f5198a6-cc53-41ad-8039-c3dcd453667a.s3-us-west-2.amazonaws.com",
-        accessKeyId: "AKIAJBEPFX6PEAHPNMPQ",
-        secretAccessKey: "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"
+        endpoint: "https://bucket-79008bfd-ae65-4fd0-9411-95731c9ade03.blobstore-azure-usw01.data-services.predix.io",
+        accessKeyId: "00d140d0b842e6bffa6b",
+        secretAccessKey: "iLa+Jx/q0zUwWpR/3v5SkfCLbyS/B/y2j3cwnW5X"
     });
     next();
 };
@@ -94,6 +103,14 @@ app.use('/api/remove', initS3, crossOrigin, function (req, res) {
     });
 });
 
+app.use('/api/download', initS3, crossOrigin, function (req, res) {
+    var fileStream = req.s3.getObject({
+        Bucket: '', Key: req.query.path
+    }).createReadStream();
+    res.attachment(req.query.path);
+    fileStream.pipe(res);
+});
+
 app.use('/api/createFile', initS3, crossOrigin, function (req, res) {
     // create an incoming form object
     var form = new formidable.IncomingForm();
@@ -106,8 +123,6 @@ app.use('/api/createFile', initS3, crossOrigin, function (req, res) {
     var datas = [];
     var promises = [];
     form.on('file', function (field, file) {
-        console.log(file);
-        console.log(field);
         var promise = new Promise(function (resolve, reject) {
             fs.readFile(file.path, function (err, data) {
                 var base64data = new Buffer(data, 'binary');
@@ -140,8 +155,6 @@ app.use('/api/createFile', initS3, crossOrigin, function (req, res) {
             // Check for and handle any errors here.
             console.error(err.message);
         }
-        console.log(fields);
-        console.log(files);
     });
 
 });
